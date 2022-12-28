@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 
@@ -19,12 +19,32 @@ async function run(){
   try{
     const allMediaCollection = client.db('eMediaZone').collection('allMedia')
 
+    // app.get('/allMedia', async(req, res) => {
+    //   const query = {};
+    //   const media = await allMediaCollection.find(query).toArray();
+    //   res.send(media);
+    // })
     app.get('/allMedia', async(req, res) => {
       const query = {};
-      const media = await allMediaCollection.find(query).toArray();
+      const cursor = allMediaCollection.find(query);
+      const media = await cursor.toArray();
       res.send(media);
     })
 
+
+    app.get('/allMedia/:id', async(req, res) => {
+      const id =req.params.id;
+      const query = { _id: ObjectId(id)};
+      const service = await allMediaCollection.findOne(query);
+      res.send(service);
+    })
+
+    // app.get('/allMedia/:id', async(req, res) => {
+    //   const id =req.params.id;
+    //   const query = { _id: ObjectId(id)};
+    //   const media = await allMediaCollection.findOne(query);
+    //   res.send(media);
+    // });
 
 
 
