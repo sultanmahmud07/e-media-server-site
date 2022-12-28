@@ -68,12 +68,37 @@ async function run(){
           res.send(user);
         })
         // app.get('/allMedia/:email', async (req, res) => {
-        //   const email = req.params.active;
+        //   const email = req.params.email;
         //   const query = { email }
         //   const user = await allMediaCollection.findOne(query);
         //   res.send(user);
         // })
 
+        app.get('/allMedias', async (req, res) => {
+          const email = req.query.email;
+          const query = { active: email};
+          const medias = await allMediaCollection.find(query).toArray();
+          res.send(medias)
+        })
+
+        app.put('/users/:id', async (req, res) => {
+          const id = req.params.id;
+          const filter = { _id: ObjectId(id)};
+          const user = req.body;
+          const option = {upsert: true};
+          const updatedUser = {
+            $set: {
+              userName: user.userName,
+              email: user.email,
+              photoURL: user.photoURL,
+              university: user.university,
+              location: user.location
+            }
+          }
+          const result = await allUsersCollection.updateOne(filter, updatedUser, option);
+          res.send(result);
+          // console.log(updateUser);
+        })
 
 
 
