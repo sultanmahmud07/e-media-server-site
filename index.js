@@ -15,7 +15,32 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.BD_USER}:${process.env.BD_PASS}@cluster0.wtcs29q.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+async function run(){
+  try{
+    const allMediaCollection = client.db('eMediaZone').collection('allMedia')
 
+    app.get('/allMedia', async(req, res) => {
+      const query = {};
+      const media = await allMediaCollection.find(query).toArray();
+      res.send(media);
+    })
+
+
+
+
+
+
+
+
+
+
+  }
+  finally{
+
+  }
+
+}
+run().catch(console.log);
 
 
 
