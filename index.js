@@ -18,6 +18,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
   try{
     const allMediaCollection = client.db('eMediaZone').collection('allMedia')
+    const allUsersCollection = client.db('eMediaZone').collection('users')
 
     // app.get('/allMedia', async(req, res) => {
     //   const query = {};
@@ -45,10 +46,33 @@ async function run(){
     //   const media = await allMediaCollection.findOne(query);
     //   res.send(media);
     // });
+    app.post('/allMedia', async(req, res) => {
+      const product = req.body;
+      const result = await allMediaCollection.insertOne(product);
+      res.send(result);
+    })
 
 
+        //All user Collection code here>>>>
+        app.post('/users', async(req, res) => {
+          const user = req.body;
+          const result = await allUsersCollection.insertOne(user);
+          res.send(result);
+        })
 
 
+        app.get('/users/:email', async (req, res) => {
+          const email = req.params.email;
+          const query = { email }
+          const user = await allUsersCollection.findOne(query);
+          res.send(user);
+        })
+        // app.get('/allMedia/:email', async (req, res) => {
+        //   const email = req.params.active;
+        //   const query = { email }
+        //   const user = await allMediaCollection.findOne(query);
+        //   res.send(user);
+        // })
 
 
 
